@@ -439,7 +439,7 @@ body {
 
 /* Initial off-screen state for animation */
 .sidebar.sidebar-hidden {
-  transform: translateX(-100%);
+  transform: translateX(-110%);
 }
 
 /* Main Content Fade */
