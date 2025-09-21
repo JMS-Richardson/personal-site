@@ -1,0 +1,462 @@
+/* Reset and Variables */
+* {
+  --background-color: #121212;
+  --sidebar-color: #1e1e1e;
+  --sidebar-hover-color: #2a2a2a;
+  --text-color: #e0e0e0;
+  --link-color: #b0b0b0;
+  --link-hover-color: #90f9bf;
+  --shadow-color: rgba(0, 0, 0, 0.7);
+  --border-radius: 8px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global Styles */
+body {
+  font-family: "Lora";
+  font-weight: 400;
+  font-style: normal;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* Main Body Container */
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 270px; /* Slightly wider for breathing room */
+  background-color: var(--sidebar-color);
+  padding: 60px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 3px 0 15px var(--shadow-color);
+  border-radius: 0 10px 10px 0;
+  /* Slide-in animation handled in JS */
+}
+
+/* Profile Photo */
+.profile-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 20%;
+  margin-bottom: 40px;
+  object-fit: cover;
+  border: 3px solid #444;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+.profile-photo:hover {
+  transform: scale(1.05);
+}
+
+/* Sidebar Navigation */
+.sidebar ul {
+  list-style: none;
+  width: 100%;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.sidebar ul li {
+  margin: 22px 0;
+}
+
+.sidebar ul li a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-size: 20px;
+  padding: 12px 15px;
+  display: block;
+  text-align: center;
+  border-radius: var(--border-radius);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: inset 0 0 0 0 var(--link-hover-color);
+  will-change: background-color, color;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a:focus {
+  background-color: var(--sidebar-hover-color);
+  color: var(--link-hover-color);
+  box-shadow: inset 0 0 10px var(--link-hover-color);
+  outline: none;
+  cursor: pointer;
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  padding: 50px 60px;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #181818 0%, #121212 100%);
+  border-radius: 0 10px 10px 0;
+  box-shadow: inset 0 0 20px rgba(255,255,255,0.02);
+  transition: opacity 1s ease;
+}
+
+/* Headings */
+.main-content h1 {
+  font-size: 32px;
+  margin-bottom: 25px;
+  color: #fff;
+  letter-spacing: 0.05em;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+}
+
+/* Paragraphs */
+.main-content p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #ccc;
+  max-width: 720px;
+  margin-bottom: 30px;
+}
+
+/* CV Button */
+.download-cv {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 14px 30px;
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(58,58,58,0.7);
+  transition: background-color 0.4s ease, box-shadow 0.3s ease;
+}
+
+.download-cv:hover,
+.download-cv:focus {
+  background-color: #505050;
+  box-shadow: 0 6px 18px rgba(80,80,80,0.9);
+  outline: none;
+}
+
+/* Contact List */
+.contact-list {
+  list-style: none;
+  margin-top: 30px;
+}
+
+.contact-list li {
+  margin-bottom: 22px;
+  font-size: 18px;
+  color: #bbb;
+}
+
+.contact-list a {
+  color: var(--link-hover-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.contact-list a:hover,
+.contact-list a:focus {
+  text-decoration: underline;
+  color: #90caf9;
+  outline: none;
+}
+
+/* Album Grid */
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+
+/* Album Cards */
+/* Make album card fixed size */
+.album-card {
+  position: relative; /* needed for overlay */
+  width: 260px;  /* fixed width to match grid */
+  height: 260px; /* fixed height, same as image height for neatness */
+  background-color: transparent; /* no background so cover shows */
+  border: none; /* remove border since card is just image */
+  box-shadow: none; /* remove box-shadow for minimal look */
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.album-card:hover,
+.album-card:focus-within {
+  transform: scale(1.05);
+  outline: none;
+}
+
+/* Album cover fills entire card */
+.album-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter 0.3s ease;
+  border-radius: var(--border-radius);
+}
+
+.album-card:hover .album-cover,
+.album-card:focus-within .album-cover {
+  filter: brightness(0.7); /* darken slightly on hover for text contrast */
+}
+
+/* Album info overlay - hidden by default */
+.album-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.75); /* semi-transparent black overlay */
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Show info on hover */
+.album-card:hover .album-info,
+.album-card:focus-within .album-info {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Album info text styling */
+.album-info h3 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.album-info p {
+  font-size: 16px;
+  color: #ddd;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+/* Album links (optional if you have any) */
+.album-links {
+  margin-top: auto; /* push to bottom */
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.music-icons {
+  width: 28px;
+  height: 28px;
+  opacity: 0.85;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.music-icons:hover,
+.music-icons:focus {
+  opacity: 1;
+  transform: scale(1.15);
+  outline: none;
+}
+
+.music-icons {
+  display: flex;
+  gap: 12px; /* space between icons */
+  margin-top: 12px; /* optional spacing above */
+  justify-content: flex-start; /* align icons left */
+  align-items: center;
+}
+
+/* Timeline Styles */
+.timeline {
+  position: relative;
+  margin-top: 50px;
+  padding-left: 32px;
+  border-left: 3px solid #444;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -13px;
+  top: 7px;
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 3px solid var(--sidebar-color);
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+.timeline-content {
+  padding-left: 22px;
+}
+
+.timeline-content h3 {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.timeline-date {
+  font-size: 15px;
+  color: #999;
+  margin-bottom: 12px;
+  display: block;
+  font-style: italic;
+}
+
+.timeline-content p {
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    padding: 15px 10px;
+    border-right: none;
+    border-bottom: 1px solid #2a2a2a;
+    border-radius: 0 0 10px 10px;
+    box-shadow: none;
+  }
+
+  .sidebar ul {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .sidebar ul li {
+    margin: 0 15px;
+  }
+
+  .main-content {
+    padding: 30px 20px;
+    border-radius: 0;
+  }
+
+  .album-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .timeline {
+    padding-left: 20px;
+  }
+}
+
+/* Social Media Icons Section */
+#social-media {
+  margin-top: 30px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.social-icons li {
+  list-style: none;
+}
+
+.social-icons a {
+  display: inline-block;
+}
+
+.social-icons img {
+  width: 34px;
+  height: 34px;
+  transition: transform 0.35s ease;
+  filter: invert(1);
+}
+
+.social-icons img:hover,
+.social-icons a:focus img {
+  transform: scale(1.15);
+  outline: none;
+  filter: invert(0.85);
+}
+
+.music-icons img {
+  width: 34px;
+  height: 34px;
+  transition: transform 0.3s ease;
+  filter: invert(1);
+}
+
+.music-icons img:hover,
+.music-icons a:focus img {
+  transform: scale(1.15);
+  outline: none;
+  filter: invert(0.85);
+}
+
+/* Sidebar slide-in default state */
+.sidebar {
+  transform: translateX(0);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Initial off-screen state for animation */
+.sidebar.sidebar-hidden {
+  transform: translateX(-100%);
+}
+
+/* Main Content Fade */
+.main-content {
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+/* Album card animation states */
+.album-card {
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.album-card.hidden {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+}
